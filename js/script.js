@@ -1,4 +1,4 @@
-"use strict";
+
 
 document.getElementById("penaltiesBtn").addEventListener("click", function () {
     document.getElementById("penalties").style.display = "block";

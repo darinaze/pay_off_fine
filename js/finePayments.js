@@ -1,4 +1,4 @@
-"use strict";
+
 /**
 Перед вами список полів. Це можна сказати пряме посилання на кожне із полів форми.
 Якщо ви додасте до змінної .value (fineNumber.value) то отримаєте значення
@@ -12,7 +12,7 @@ let amount = document.getElementById("amount");
 let buttonSubmit = document.getElementById("payFine");
 
 //Ця зміна містить всі дані які в нас зберігаються у файлі data
-let DB = data.finesData;
+let dbAcces = data.finesData;
 
 
 /**
@@ -34,5 +34,50 @@ alert "Номер не співпадає" або "Сума не співпад�
  */
 buttonSubmit.addEventListener('click',payFine);
 function payFine(){
+    let foundNumber = finesData.find(function(itemObject){
+        return itemObject["номер"] === fineNumber.value ;
+    });
 
+    if(!foundNumber){
+        return alert("Номер не співпадає");
+    }
+
+    let gotPassportNumber = /^([а-яїєґ]|[А-ЯЇЄҐ]){2}(\d{6})$/;
+    if(!gotPassportNumber.test(passport.value)){
+        return alert("Не вірний паспортний номер");
+    }
+
+    let gotCreditCard = /^\d{16}$/ ;
+    if(!gotCreditCard.test(creditCardNumber.value)){
+        return alert("Не вірна кредитна картка");
+    }
+
+    let gotCvv = /^\d{3}$/ ;
+    if(!gotCvv.test(cvv.value)){
+        return alert("Не вірний cvv");
+    }
+
+    let foundAmount = finesData.find(function(itemObject){
+        return itemObject["номер"] === fineNumber.value && itemObject["сума"] === Number(amount.value) ;
+    });
+    if(!foundAmount){
+        return alert("Сума не співпадає");
+    }
+
+    // let deletePayment = finesData.findIndex(payment => payment["номер"] == fineNumber.value);
+    // finesData.slice(deletePayment,1);
+
+    let deletePayment = finesData.findIndex(function(itemObject){
+        return itemObject["номер"] === fineNumber.value;
+    })
+
+    finesData.splice(deletePayment,1);
+    fineNumber.value = '';
+    passport.value = '';
+    creditCardNumber.value = '';
+    cvv.value = '';
+    amount.value = '';
 }
+
+    
+    
